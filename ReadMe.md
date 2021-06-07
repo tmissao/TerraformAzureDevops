@@ -71,7 +71,7 @@ terraform apply # Applies all the modifications
 ## Results
 ---
 
-
+![](./artifacts/azure-devops-result.gif)
 
 ## References
 ---
