@@ -125,8 +125,6 @@ variable "minimum_reviewers_policy" {
 variable "project_reviewers" {
   type = list(string)
   default = [
-    "tiago.missao@acqio.com.br",
-    "paulo.barros@acqio.com.br",
-    "eduardo.rocha@acqio.com.br"
+    "tiago.missao@acqio.com.br"
   ]
 }
