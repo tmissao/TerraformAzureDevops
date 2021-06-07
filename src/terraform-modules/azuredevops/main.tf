@@ -1,3 +1,12 @@
+terraform {
+  required_providers {
+    azuredevops = {
+      source  = "microsoft/azuredevops"
+      version = "0.1.4"
+    }
+  }
+}
+
 locals {
   reviewers = [
     for k, v in data.azuredevops_users.reviewers : join(",", v.users[*].descriptor)
@@ -6,6 +15,11 @@ locals {
     for k, v in var.pipelines : k
     if v.build_validation
   ]
+}
+
+data "azuredevops_users" "reviewers" {
+  for_each       = toset(var.project_reviewers)
+  principal_name = each.value
 }
 
 resource "azuredevops_project" "project" {

@@ -2,19 +2,17 @@ variable "azuredevops_personal_token" {
   type    = string
 }
 
+variable "organization_name" {
+  type    = string
+}
+
 variable "azuredevops_agentpoll_name" {
   type    = string
   default = "Default"
 }
 
-variable "organization_name" {
-  type    = string
-  default = "Acqio"
-}
-
 variable "project_name" {
   type    = string
-  default = "Terraform"
 }
 
 variable "project_scope" {
@@ -29,46 +27,20 @@ variable "project_scope" {
 
 variable "repository_name" {
   type    = string
-  default = "Demo Repository"
 }
 
 variable "repository_init_source_url" {
   type    = string
-  default = "https://github.com/tmissao/NodeExpressTemplate.git"
 }
 
 variable "pipelines" {
   type = map(object({ yml_path = string, build_validation = bool }))
-  default = {
-    "ensure-quality" : {
-      "yml_path" : ".azuredevops/pipeline-pr-builder.yml"
-      "build_validation" : true
-    },
-    "merge" : {
-      "yml_path" : ".azuredevops/pipeline-merge.yml"
-      "build_validation" : false
-    },
-    "deploy-dev" : {
-      "yml_path" : ".azuredevops/pipeline-deploy-dev.yml"
-      "build_validation" : false
-    },
-    "deploy-prod" : {
-      "yml_path" : ".azuredevops/pipeline-deploy-prod.yml"
-      "build_validation" : false
-    },
-  }
+  default = {}
 }
 
 variable "pipeline_environments" {
   type = map(object({ required_approval = bool }))
-  default = {
-    "development" : {
-      "required_approval" : false
-    },
-    "production" : {
-      "required_approval" : true
-    },
-  }
+  default = {}
 }
 
 variable "merge_policy" {
@@ -124,9 +96,5 @@ variable "minimum_reviewers_policy" {
 
 variable "project_reviewers" {
   type = list(string)
-  default = [
-    "tiago.missao@acqio.com.br",
-    "paulo.barros@acqio.com.br",
-    "eduardo.rocha@acqio.com.br"
-  ]
+  default = []
 }
