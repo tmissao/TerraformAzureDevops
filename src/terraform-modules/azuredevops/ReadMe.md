@@ -125,3 +125,5 @@ This project intends to fully automitaze a project setup at Azure Devops. Config
 - `azuredevops_agentpoll_name` - Give the necessary permission to pipelines use the defined agentpoll. Defaults `Default` 
 
 ## Output
+
+- `repository_url` - Repository`s Url

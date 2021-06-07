@@ -18,7 +18,7 @@ resource "azuredevops_build_definition" "pipelines" {
 resource "null_resource" "environments" {
   for_each = var.pipeline_environments
   provisioner "local-exec" {
-    command = "/bin/bash ./scripts/setup-pipeline-environment.sh"
+    command = "/bin/bash ${path.module}/scripts/setup-pipeline-environment.sh"
     environment = {
       TOKEN            = var.azuredevops_personal_token
       ORGANIZATION     = var.organization_name

@@ -9,3 +9,7 @@ module "azuredevops" {
   pipeline_environments = var.pipeline_environments
   project_reviewers = var.project_reviewers
 }
+
+output "azuredevops" {
+  value = module.azuredevops
+}
