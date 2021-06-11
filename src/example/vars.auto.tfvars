@@ -1,8 +1,8 @@
-organization_name="Acqio"
-project_name="Terraform"
-repository_name="Demo-Repository"
-repository_init_source_url="https://github.com/tmissao/NodeExpressTemplate.git"
-pipelines={
+organization_name          = "Acqio"
+project_name               = "demo-project"
+repository_name            = "demo"
+repository_init_source_url = "https://github.com/tmissao/NodeExpressTemplate.git"
+pipelines = {
   "ensure-quality" : {
     "yml_path" : ".azuredevops/pipeline-pr-builder.yml"
     "build_validation" : true
@@ -20,14 +20,24 @@ pipelines={
     "build_validation" : false
   },
 }
-pipeline_environments={
-  "development" : {
-    "required_approval" : false
+
+required_merge_requests_reviewers = {
+  "Devops Reviewers" : {
+    "reviewers" : ["tiago.missao@xpto.com.br", "antonio.barros@xpto.com.br"],
+    "path" : ["/config/*", "/.azuredevops/*", "/.buildkite/*"]
   },
-  "production" : {
-    "required_approval" : true
+  "Global Reviewers" : {
+    "reviewers" : ["antonio.barros@xpto.com.br"]
+    "path" : ["*"]
   },
 }
-project_reviewers=[
-  "tiago.missao@acqio.com.br"
-]
+
+release_environments_reviewers = {
+  "Development" : {
+    "G1" : ["tiago.missao@xpto.com.br"]
+  }
+  "Production" : {
+    "G2" : ["tiago.missao@xpto.com.br", "antonio.barros@xpto.com.br"]
+    "G3" : ["eduardo.moura@xpto.com.br", "irineu.pedroso@xpto.com.br"]
+  }
+}

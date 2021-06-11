@@ -1,9 +1,11 @@
-#! /bin/bash
+#! /bin/bash -e
 
 BASE_URL="https://dev.azure.com/$ORGANIZATION/$PROJECT/_apis"
 ENV_DESCRIPTION="$ENV_NAME environment"
+API_VERSION="api-version=6.0-preview.1"
+REVIEWER_GROUP=($(echo $REVIEWER_GROUPS | tr "," "\n"))
 
-RESULT=$(curl -s -X POST "$BASE_URL/distributedtask/environments?api-version=6.0-preview.1" \
+RESULT=$(curl -s -X POST "$BASE_URL/distributedtask/environments?$API_VERSION" \
     -H "Content-Type: application/json" \
     -u null:$TOKEN \
     --data @<(cat <<EOF
@@ -17,10 +19,16 @@ EOF
 
 ENV_ID=$(echo $RESULT | grep -o -E "\"id\":[0-9]+" | awk -F\: '{print $2}')
 
-echo $REQUIRE_APPROVAL
-
 if [[ $REQUIRE_APPROVAL -eq 1 ]]; then
-curl -s -X POST "$BASE_URL/pipelines/checks/configurations?api-version=6.0-preview.1" \
+  APPROVERS=""
+  
+  for group in "${REVIEWER_GROUP[@]}"
+  do
+    APPROVERS+="{\"id\": \"$group\"},"
+  done
+  APPROVERS=${APPROVERS::-1}
+
+curl -s -X POST "$BASE_URL/pipelines/checks/configurations?$API_VERSION" \
     -H "Content-Type: application/json" \
     -u null:$TOKEN \
     --data @<(cat <<EOF
@@ -31,14 +39,12 @@ curl -s -X POST "$BASE_URL/pipelines/checks/configurations?api-version=6.0-previ
   },
   "settings": {
     "approvers": [
-      {
-        "id": "$REVIEWER_GROUP"
-      }
+      $APPROVERS
     ],
     "executionOrder": 1, 
     "instructions": "",
     "blockedApprovers": [],
-    "minRequiredApprovers": 1,  
+    "minRequiredApprovers": ${#REVIEWER_GROUP[@]},  
     "requesterCannotBeApprover": false
   },
   "resource": {

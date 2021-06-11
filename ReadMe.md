@@ -28,6 +28,7 @@ Also, it configures the branch policies like:
 - `Work Items Policies`
 - `Minimum Reviewers Policy`
 - `Automatic Required Reviewer Policy` 
+- `Pipeline Release Approvals `
 
 And can create pipelines and environments pipelines, configuring them to use a specific agent pool.
 
@@ -35,17 +36,17 @@ And can create pipelines and environments pipelines, configuring them to use a s
 ---
 
 ```bash
-module "azuredevops" {
-  source = "../terraform-modules/azuredevops/"
-  azuredevops_personal_token = "XXXX-XXXX-XXXX"
-  organization_name = "MyOrganization"
-  project_name = "MyProject"
-  repository_name = "MyRepository"
-  repository_init_source_url = "https://github.com/tmissao/NodeExpressTemplate.git"
+module "demo" {
+  source                            = "../terraform-modules/azuredevops-repository"
+  azuredevops_personal_token        = var.azuredevops_personal_token
+  organization_name                 = var.organization_name
+  project_id                        = azuredevops_project.project.id
+  repository_name                   = var.repository_name
+  repository_init_source_url        = var.repository_init_source_url
 }
 ```
 
-### See the [demo](./src/example) for full usage and [azuredevops-module](./src/terraform-modules/azuredevops) to module documentation.
+### See the [demo](./src/example) for full usage and [azuredevops-module](./src/terraform-modules/azuredevops-repository) to module documentation.
 
 ## Results
 ---

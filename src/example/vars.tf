@@ -1,34 +1,44 @@
 variable "azuredevops_personal_token" {
+  type = string
+}
+
+variable "azuredevops_agentpoll_name" {
   type    = string
+  default = "Default"
 }
 
 variable "organization_name" {
-  type    = string
+  type = string
 }
 
 variable "project_name" {
-  type    = string
+  type = string
 }
 
 variable "repository_name" {
-  type    = string
+  type = string
 }
 
 variable "repository_init_source_url" {
-  type    = string
+  type = string
 }
 
 variable "pipelines" {
-  type = map(object({ yml_path = string, build_validation = bool }))
+  type    = map(object({ yml_path = string, build_validation = bool }))
   default = {}
 }
 
 variable "pipeline_environments" {
-  type = map(object({ required_approval = bool }))
+  type    = map(object({ required_approval = bool }))
   default = {}
 }
 
-variable "project_reviewers" {
-  type = list(string)
-  default = []
+variable "required_merge_requests_reviewers" {
+  type    = map(object({ reviewers = list(string), path = list(string) }))
+  default = {}
+}
+
+variable "release_environments_reviewers" {
+  type    = map(map(list(string)))
+  default = {}
 }

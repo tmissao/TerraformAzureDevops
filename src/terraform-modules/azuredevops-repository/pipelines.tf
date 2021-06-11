@@ -1,6 +1,6 @@
 resource "azuredevops_build_definition" "pipelines" {
   for_each   = var.pipelines
-  project_id = azuredevops_project.project.id
+  project_id = data.azuredevops_project.project.id 
   name       = each.key
 
   ci_trigger {
@@ -16,16 +16,16 @@ resource "azuredevops_build_definition" "pipelines" {
 }
 
 resource "null_resource" "environments" {
-  for_each = var.pipeline_environments
+  for_each = local.pipeline_release_environments
   provisioner "local-exec" {
     command = "/bin/bash ${path.module}/scripts/setup-pipeline-environment.sh"
     environment = {
       TOKEN            = var.azuredevops_personal_token
       ORGANIZATION     = var.organization_name
-      PROJECT          = var.project_name
-      ENV_NAME         = each.key
-      REQUIRE_APPROVAL = each.value.required_approval ? 1 : 0
-      REVIEWER_GROUP   = azuredevops_group.reviewers.origin_id
+      PROJECT          = data.azuredevops_project.project.name
+      ENV_NAME         = lower("${var.repository_name}-${each.key}")
+      REQUIRE_APPROVAL = length(each.value) > 0 ? 1 : 0
+      REVIEWER_GROUPS   = join(",", each.value)
     }
   }
 }

@@ -1,5 +1,5 @@
 resource "azuredevops_branch_policy_merge_types" "merge_policy" {
-  project_id = azuredevops_project.project.id
+  project_id = data.azuredevops_project.project.id 
   enabled    = var.merge_policy.enabled
   blocking   = var.merge_policy.blocking
   settings {
@@ -10,7 +10,7 @@ resource "azuredevops_branch_policy_merge_types" "merge_policy" {
     dynamic "scope" {
       for_each = var.project_scope
       content {
-        repository_id  = scope.value.repository_id
+        repository_id  = azuredevops_git_repository.repository.id
         repository_ref = scope.value.repository_ref
         match_type     = scope.value.match_type
       }
@@ -19,14 +19,14 @@ resource "azuredevops_branch_policy_merge_types" "merge_policy" {
 }
 
 resource "azuredevops_branch_policy_comment_resolution" "comment_policy" {
-  project_id = azuredevops_project.project.id
+  project_id = data.azuredevops_project.project.id 
   enabled    = var.comment_resolution_policy.enabled
   blocking   = var.comment_resolution_policy.blocking
   settings {
     dynamic "scope" {
       for_each = var.project_scope
       content {
-        repository_id  = scope.value.repository_id
+        repository_id  = azuredevops_git_repository.repository.id
         repository_ref = scope.value.repository_ref
         match_type     = scope.value.match_type
       }
@@ -35,14 +35,14 @@ resource "azuredevops_branch_policy_comment_resolution" "comment_policy" {
 }
 
 resource "azuredevops_branch_policy_work_item_linking" "linking_item" {
-  project_id = azuredevops_project.project.id
+  project_id = data.azuredevops_project.project.id 
   enabled    = var.work_item_policy.enabled
   blocking   = var.work_item_policy.blocking
   settings {
     dynamic "scope" {
       for_each = var.project_scope
       content {
-        repository_id  = scope.value.repository_id
+        repository_id  = azuredevops_git_repository.repository.id
         repository_ref = scope.value.repository_ref
         match_type     = scope.value.match_type
       }
@@ -52,7 +52,7 @@ resource "azuredevops_branch_policy_work_item_linking" "linking_item" {
 
 resource "azuredevops_branch_policy_build_validation" "validations" {
   for_each   = toset(local.pipeline_build_validations)
-  project_id = azuredevops_project.project.id
+  project_id = data.azuredevops_project.project.id 
   enabled    = var.build_validation_policy.enabled
   blocking   = var.build_validation_policy.blocking
 
@@ -64,7 +64,7 @@ resource "azuredevops_branch_policy_build_validation" "validations" {
     dynamic "scope" {
       for_each = var.project_scope
       content {
-        repository_id  = scope.value.repository_id
+        repository_id  = azuredevops_git_repository.repository.id
         repository_ref = scope.value.repository_ref
         match_type     = scope.value.match_type
       }
@@ -73,7 +73,7 @@ resource "azuredevops_branch_policy_build_validation" "validations" {
 }
 
 resource "azuredevops_branch_policy_min_reviewers" "minimum_reviews" {
-  project_id = azuredevops_project.project.id
+  project_id = data.azuredevops_project.project.id 
   enabled  = var.minimum_reviewers_policy.enabled
   blocking = var.minimum_reviewers_policy.blocking
   settings {
@@ -86,7 +86,7 @@ resource "azuredevops_branch_policy_min_reviewers" "minimum_reviews" {
     dynamic "scope" {
         for_each = var.project_scope
         content {
-            repository_id  = scope.value.repository_id
+            repository_id  = azuredevops_git_repository.repository.id
             repository_ref = scope.value.repository_ref
             match_type     = scope.value.match_type
         }
@@ -95,17 +95,19 @@ resource "azuredevops_branch_policy_min_reviewers" "minimum_reviews" {
 }
 
 resource "azuredevops_branch_policy_auto_reviewers" "required_reviewers" {
-  project_id = azuredevops_project.project.id
-  enabled  = length(var.project_reviewers) > 0
-  blocking = length(var.project_reviewers) > 0
+  for_each = local.project_reviewers
+  project_id =data.azuredevops_project.project.id 
+  enabled  = length(each.value.reviewers) > 0
+  blocking = length(each.value.reviewers) > 0
   settings {
-    auto_reviewer_ids  = [azuredevops_group.reviewers.origin_id]
-    submitter_can_vote = true
-    message            = "Auto reviewer"
+    auto_reviewer_ids  = [azuredevops_group.reviewers[each.key].origin_id]
+    submitter_can_vote = false
+    message            = each.key
+    path_filters = each.value.path
     dynamic "scope" {
         for_each = var.project_scope
         content {
-            repository_id  = scope.value.repository_id
+            repository_id  = azuredevops_git_repository.repository.id
             repository_ref = scope.value.repository_ref
             match_type     = scope.value.match_type
         }

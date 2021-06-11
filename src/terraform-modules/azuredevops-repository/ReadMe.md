@@ -10,11 +10,10 @@ This project intends to fully automitaze a project setup at Azure Devops. Config
 
 - `organization_name` - (Required) Azure Devops Organization.
 
-- `project_name` - (Required) Azure Project Name.
+- `project_id` - (Required) Id of the Azure Project.
 
 - `project_scope` - (Optional) Project Policies Scope to be applied
 
-    - `repository_id` - (Required) repository id to apply the policy. Defaults `null`, meaning that all repositories.
     - `repository_ref` - (Required) repository's branch which policy will be applied. Defaults `refs/heads/master`.
     - `match_type` - (Required) match type used to apply the policy. Defaults `Exact`. 
     
@@ -39,9 +38,19 @@ This project intends to fully automitaze a project setup at Azure Devops. Config
     - `yml_path` - (Required) Yml path of the pipeline definition at the imported repository
     - `build_validation` - (Required) Boolean indicating if the pipeline will be used to validate a build (Build Validation)
 
-- `pipeline_environments` - (Optional) A dictionary of Azure Devops environments that will be associated with the created pipelines, which the dictionary key is the name of the pipeline environment. Defaults `[]`.
+- `release_environments_reviewers` - (Optional) A dictionary of a dictionary representing the azure devops pipeline environments and the approval groups of these environments. In the first level the keys mean the environments, at the second level the keys mean the approval groups and their values are the group's members. Defaults `{}`
 
-    - `required_approval` - (Required) Boolean indicating if is necessary a manual approval to run the pipeline at the associated environment
+    Example
+
+    ```
+      "Development": {
+        "G1": ["tiago.missao@xpto.com.br"]
+      }
+      "Production": {
+        "G2": ["tiago.missao@xpto.com.br", "antonio.barros@xpto.com.br"]
+        "G3": ["eduardo.moura@xpto.com.br", "irineu.pedroso@xpto.com.br"]
+      }
+    ```
 
 - `merge_policy` - (Optional) Defines the allowed merge operations in the azure devops project.
     - `enabled` - (Required) Boolean indicating if policy is enabled. Defaults `true`.
@@ -119,10 +128,9 @@ This project intends to fully automitaze a project setup at Azure Devops. Config
       "author_can_vote": false
     }
     ```
-
-- `project_reviewers` - Creates a reviewer group with the entities passed as value, and all pull request and release pipelines (when necesary) will need at least one approval of a member to be executed. Defaults `[]`.
-
-- `azuredevops_agentpoll_name` - Give the necessary permission to pipelines use the defined agentpoll. Defaults `Default` 
+- `required_merge_requests_reviewers` - (optional) A dictionary meaning the merge request reviewers groups. The dictionary key represents the group's name. Defaults `{}`.
+  - `reviewers` - (Required) List of string with the email of the reviewers.
+  - `path` - (Required) List of string representing the absolute paths which the policy is applied.
 
 ## Output
 
