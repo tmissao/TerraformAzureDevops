@@ -58,7 +58,7 @@ module "repository" {
 }
 ```
 
-### See the [demo](./src/example) for full usage and [azuredevops-module](./src/terraform-modules/azuredevops-repository) to module documentation.
+### See the [demo](./src/example) for full usage and for documentation look at [azuredevops-project](./src/terraform-modules/azuredevops-project) and [azuredevops-repository](./src/terraform-modules/azuredevops-repository).
 
 ## Results
 ---
