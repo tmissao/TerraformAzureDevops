@@ -15,8 +15,8 @@ locals {
   // Rebuilds the `required_merge_requests_reviewers` substituting the reviewers` values with Azure Identity Descriptor
   project_reviewers = {
     for k, v in var.required_merge_requests_reviewers : k => {
-      "reviewers": flatten([ for i in v.reviewers : data.azuredevops_users.all_reviewers[i].users[*].descriptor ]),
-      "path": v.path
+      "reviewers" : flatten([for i in v.reviewers : data.azuredevops_users.all_reviewers[i].users[*].descriptor]),
+      "path" : v.path
     }
   }
   // Selects just the build validations pipelines
@@ -32,21 +32,21 @@ locals {
   ])
   // Rebuilds the `release_environments_reviewers` substituting the reviewers` values with Azure Identity Descriptor
   release_reviewers = {
-    for k, v in var.release_environments_reviewers: k => {
-      for x, z in v : x => flatten([ for i in z : data.azuredevops_users.all_release_reviewers[i].users[*].descriptor ])
+    for k, v in var.release_environments_reviewers : k => {
+      for x, z in v : x => flatten([for i in z : data.azuredevops_users.all_release_reviewers[i].users[*].descriptor])
     }
   }
   // Builds an array with all release groups independent of the environment
   release_groups = flatten([
-    for k, v in var.release_environments_reviewers: [
-      for z in keys(v): "${k} ${z}"
+    for k, v in var.release_environments_reviewers : [
+      for z in keys(v) : "${k} ${z}"
       if length(v[z]) > 0
-    ] 
+    ]
   ])
   // Builds a map with the environment as key and a list containing all release approver groups as value
   pipeline_release_environments = {
-    for k, v in var.release_environments_reviewers: k => 
-      flatten([for z in keys(v) : azuredevops_group.release_reviewers["${k} ${z}"].origin_id])
+    for k, v in var.release_environments_reviewers : k =>
+    flatten([for z in keys(v) : azuredevops_group.release_reviewers["${k} ${z}"].origin_id])
   }
 }
 
@@ -65,7 +65,7 @@ data "azuredevops_project" "project" {
 }
 
 resource "azuredevops_git_repository" "repository" {
-  project_id = data.azuredevops_project.project.id 
+  project_id = data.azuredevops_project.project.id
   name       = var.repository_name
   initialization {
     init_type   = "Import"
@@ -75,15 +75,15 @@ resource "azuredevops_git_repository" "repository" {
 }
 
 resource "azuredevops_group" "reviewers" {
-  for_each = local.project_reviewers
-  scope        = data.azuredevops_project.project.id 
+  for_each     = local.project_reviewers
+  scope        = data.azuredevops_project.project.id
   display_name = each.key
   members      = each.value.reviewers
 }
 
 resource "azuredevops_group" "release_reviewers" {
-  for_each = toset(local.release_groups)
-  scope        = data.azuredevops_project.project.id 
+  for_each     = toset(local.release_groups)
+  scope        = data.azuredevops_project.project.id
   display_name = "${var.repository_name} ${each.key} Release Reviewers"
   members      = local.release_reviewers[split(" ", each.key)[0]][split(" ", each.key)[1]]
 }

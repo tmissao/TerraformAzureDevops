@@ -16,17 +16,17 @@ variable "project_name" {
 }
 
 variable "project_administrators" {
-  type = list(string)
+  type    = list(string)
   default = []
 }
 
 variable "project_contributors" {
-  type = list(string)
+  type    = list(string)
   default = []
 }
 
 variable "project_readers" {
-  type = list(string)
+  type    = list(string)
   default = []
 }
 

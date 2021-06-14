@@ -3,7 +3,7 @@ variable "project_name" {
 }
 
 variable "project_features" {
-  type = object({boards = string, repositories = string, pipelines = string, artifacts = string})
+  type = object({ boards = string, repositories = string, pipelines = string, artifacts = string })
   default = {
     "boards"       = "enabled"
     "repositories" = "enabled"
@@ -13,21 +13,21 @@ variable "project_features" {
 }
 
 variable "authorized_agent_queues_name" {
-  type = list(string)
+  type    = list(string)
   default = []
 }
 
 variable "project_administrators" {
-  type = list(string)
+  type    = list(string)
   default = []
 }
 
 variable "project_contributors" {
-  type = list(string)
+  type    = list(string)
   default = []
 }
 
 variable "project_readers" {
-  type = list(string)
+  type    = list(string)
   default = []
 }

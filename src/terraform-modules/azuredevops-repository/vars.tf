@@ -1,9 +1,9 @@
 variable "azuredevops_personal_token" {
-  type    = string
+  type = string
 }
 
 variable "organization_name" {
-  type    = string
+  type = string
 }
 
 variable "project_id" {
@@ -20,25 +20,25 @@ variable "project_scope" {
 }
 
 variable "repository_name" {
-  type    = string
+  type = string
 }
 
 variable "repository_init_source_url" {
-  type    = string
+  type = string
 }
 
 variable "repository_import_waiting_time" {
-  type = string
+  type    = string
   default = "60s"
 }
 
 variable "pipelines" {
-  type = map(object({ yml_path = string, build_validation = bool }))
+  type    = map(object({ yml_path = string, build_validation = bool }))
   default = {}
 }
 
 variable "release_environments_reviewers" {
-  type = map(map(list(string)))
+  type    = map(map(list(string)))
   default = {}
 }
 
@@ -60,7 +60,7 @@ variable "merge_policy" {
 }
 
 variable "comment_resolution_policy" {
-  type = object({enabled = bool, blocking = bool})
+  type = object({ enabled = bool, blocking = bool })
   default = {
     "enabled" : true
     "blocking" : true
@@ -68,7 +68,7 @@ variable "comment_resolution_policy" {
 }
 
 variable "work_item_policy" {
-  type = object({enabled = bool, blocking = bool})
+  type = object({ enabled = bool, blocking = bool })
   default = {
     "enabled" : true
     "blocking" : true
@@ -76,7 +76,7 @@ variable "work_item_policy" {
 }
 
 variable "build_validation_policy" {
-  type = object({enabled = bool, blocking = bool})
+  type = object({ enabled = bool, blocking = bool })
   default = {
     "enabled" : true
     "blocking" : true
@@ -84,16 +84,16 @@ variable "build_validation_policy" {
 }
 
 variable "minimum_reviewers_policy" {
-  type = object({enabled = bool, blocking = bool, minimum_number_of_reviewer = number, author_can_vote = bool})
+  type = object({ enabled = bool, blocking = bool, minimum_number_of_reviewer = number, author_can_vote = bool })
   default = {
     "enabled" : true
     "blocking" : true
     "minimum_number_of_reviewer" : 1
-    "author_can_vote": false
+    "author_can_vote" : false
   }
 }
 
 variable "required_merge_requests_reviewers" {
-  type = map(object({reviewers = list(string), path = list(string)}))
+  type    = map(object({ reviewers = list(string), path = list(string) }))
   default = {}
 }

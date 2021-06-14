@@ -9,7 +9,7 @@ resource "null_resource" "waiting_git_project_import" {
 
 resource "azuredevops_build_definition" "pipelines" {
   for_each   = var.pipelines
-  project_id = data.azuredevops_project.project.id 
+  project_id = data.azuredevops_project.project.id
   name       = each.key
 
   ci_trigger {
@@ -35,7 +35,7 @@ resource "null_resource" "environments" {
       PROJECT          = data.azuredevops_project.project.name
       ENV_NAME         = lower("${var.repository_name}-${each.key}")
       REQUIRE_APPROVAL = length(each.value) > 0 ? 1 : 0
-      REVIEWER_GROUPS   = join(",", each.value)
+      REVIEWER_GROUPS  = join(",", each.value)
     }
   }
 }

@@ -1,10 +1,10 @@
 module "project" {
-  source                            = "../terraform-modules/azuredevops-project"
-  project_name = var.project_name
+  source                       = "../terraform-modules/azuredevops-project"
+  project_name                 = var.project_name
   authorized_agent_queues_name = var.azuredevops_agentpoll_name
-  project_administrators = var.project_administrators
-  project_contributors = var.project_contributors
-  project_readers = var.project_readers
+  project_administrators       = var.project_administrators
+  project_contributors         = var.project_contributors
+  project_readers              = var.project_readers
 }
 
 module "repository" {
