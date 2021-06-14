@@ -1,6 +1,6 @@
 # AzureDevops Project Setup Terraform Module
 
-This project intends to fully automitaze a project setup at Azure Devops. Configuring pipelines, build policies, branches policies, required reviewers and giving the necessary permission to pipelines use the agent pools.
+This project intends to fully automitize a project setup at Azure Devops. Configuring pipelines, build policies, branches policies, required reviewers and giving the necessary permission to pipelines use the agent pools.
 
 
 ## Arguments
@@ -32,6 +32,8 @@ This project intends to fully automitaze a project setup at Azure Devops. Config
 - `repository_name` - (Required) Repository`s Name to be created.
 
 - `repository_init_source_url` - (Required) Base Git repository Url to be imported.
+
+- `repository_import_waiting_time` - (Optional) Waiting time necessary for the imported git repository task to be done. After this, the pipeline build definitions will start to be created. Defaults `60s`.
 
 - `pipelines` - (Optional) A dictionary of pipelines to be create, which the dictionary key is the name of the pipeline. Defaults `[]`.
 

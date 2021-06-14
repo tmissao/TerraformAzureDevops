@@ -1,3 +1,12 @@
+resource "null_resource" "waiting_git_project_import" {
+  provisioner "local-exec" {
+    command = "/bin/bash ${path.module}/scripts/wait.sh"
+    environment = {
+      WAIT_TIME = var.repository_import_waiting_time
+    }
+  }
+}
+
 resource "azuredevops_build_definition" "pipelines" {
   for_each   = var.pipelines
   project_id = data.azuredevops_project.project.id 
@@ -13,6 +22,7 @@ resource "azuredevops_build_definition" "pipelines" {
     branch_name = azuredevops_git_repository.repository.default_branch
     yml_path    = each.value.yml_path
   }
+  depends_on = [null_resource.waiting_git_project_import]
 }
 
 resource "null_resource" "environments" {

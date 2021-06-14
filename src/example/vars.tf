@@ -3,8 +3,8 @@ variable "azuredevops_personal_token" {
 }
 
 variable "azuredevops_agentpoll_name" {
-  type    = string
-  default = "Default"
+  type    = list(string)
+  default = []
 }
 
 variable "organization_name" {
@@ -13,6 +13,21 @@ variable "organization_name" {
 
 variable "project_name" {
   type = string
+}
+
+variable "project_administrators" {
+  type = list(string)
+  default = []
+}
+
+variable "project_contributors" {
+  type = list(string)
+  default = []
+}
+
+variable "project_readers" {
+  type = list(string)
+  default = []
 }
 
 variable "repository_name" {

@@ -1,30 +1,17 @@
-resource "azuredevops_project" "project" {
-  name = var.project_name
-  features = {
-    "boards"       = "enabled"
-    "repositories" = "enabled"
-    "pipelines"    = "enabled"
-    "artifacts"    = "enabled"
-  }
+module "project" {
+  source                            = "../terraform-modules/azuredevops-project"
+  project_name = var.project_name
+  authorized_agent_queues_name = var.azuredevops_agentpoll_name
+  project_administrators = var.project_administrators
+  project_contributors = var.project_contributors
+  project_readers = var.project_readers
 }
 
-data "azuredevops_agent_queue" "queue" {
-  project_id = azuredevops_project.project.id
-  name       = var.azuredevops_agentpoll_name
-}
-
-resource "azuredevops_resource_authorization" "auth" {
-  project_id  = azuredevops_project.project.id
-  resource_id = data.azuredevops_agent_queue.queue.id
-  type        = "queue"
-  authorized  = true
-}
-
-module "demo" {
+module "repository" {
   source                            = "../terraform-modules/azuredevops-repository"
   azuredevops_personal_token        = var.azuredevops_personal_token
   organization_name                 = var.organization_name
-  project_id                        = azuredevops_project.project.id
+  project_id                        = module.project.id
   repository_name                   = var.repository_name
   repository_init_source_url        = var.repository_init_source_url
   pipelines                         = var.pipelines
@@ -32,6 +19,10 @@ module "demo" {
   release_environments_reviewers    = var.release_environments_reviewers
 }
 
-output "azuredevops" {
-  value = module.demo
+output "azuredevops-project" {
+  value = module.project
+}
+
+output "azuredevops-repository" {
+  value = module.repository
 }

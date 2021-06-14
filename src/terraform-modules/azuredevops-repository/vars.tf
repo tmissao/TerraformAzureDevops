@@ -27,6 +27,11 @@ variable "repository_init_source_url" {
   type    = string
 }
 
+variable "repository_import_waiting_time" {
+  type = string
+  default = "60s"
+}
+
 variable "pipelines" {
   type = map(object({ yml_path = string, build_validation = bool }))
   default = {}

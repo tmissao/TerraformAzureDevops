@@ -1,8 +1,8 @@
-organization_name          = "Acqio"
-project_name               = "demo-project"
-repository_name            = "demo"
-repository_init_source_url = "https://github.com/tmissao/NodeExpressTemplate.git"
-pipelines = {
+organization_name="Xpto"
+project_name="Automitizer"
+repository_name="demo"
+repository_init_source_url="https://github.com/tmissao/NodeExpressTemplate.git"
+pipelines={
   "ensure-quality" : {
     "yml_path" : ".azuredevops/pipeline-pr-builder.yml"
     "build_validation" : true
@@ -22,22 +22,28 @@ pipelines = {
 }
 
 required_merge_requests_reviewers = {
-  "Devops Reviewers" : {
-    "reviewers" : ["tiago.missao@xpto.com.br", "antonio.barros@xpto.com.br"],
-    "path" : ["/config/*", "/.azuredevops/*", "/.buildkite/*"]
-  },
-  "Global Reviewers" : {
-    "reviewers" : ["antonio.barros@xpto.com.br"]
-    "path" : ["*"]
-  },
-}
+    "Devops Reviewers": {
+      "reviewers": ["tiago.missao@xpto.com.br", "paulo.barros@xpto.com.br"],
+      "path": ["/config/*","/.azuredevops/*", "/.buildkite/*"]
+    },
+    "Global Reviewers": {
+      "reviewers": ["paulo.barros@xpto.com.br", "eduardo.rocha@xpto.com.br"]
+      "path": ["*"]
+    },
+  }
 
 release_environments_reviewers = {
-  "Development" : {
-    "G1" : ["tiago.missao@xpto.com.br"]
+    "Development": {}
+    "Production": {
+      "G2": ["tiago.missao@xpto.com.br", "paulo.barros@xpto.com.br"]
+      "G3": ["eduardo.rocha@xpto.com.br", "irineu.moura@xpto.com.br"]
+    }
   }
-  "Production" : {
-    "G2" : ["tiago.missao@xpto.com.br", "antonio.barros@xpto.com.br"]
-    "G3" : ["eduardo.moura@xpto.com.br", "irineu.pedroso@xpto.com.br"]
-  }
-}
+
+azuredevops_agentpoll_name = ["Default"]
+
+project_administrators = ["tiago.missao@xpto.com.br", "paulo.barros@xpto.com.br"]
+
+project_contributors = ["rodrigo.santos@xpto.com.br"]
+
+project_readers = ["eduardo.rocha@xpto.com.br", "myllena.cardoso@xpto.com.br", "vandson.araujo@xpto.com.br"]
