@@ -1,7 +1,6 @@
-# AzureDevops Project Setup Terraform Module
+# AzureDevops Repository Setup Terraform Module
 
-This project intends to fully automitize a project setup at Azure Devops. Configuring pipelines, build policies, branches policies, required reviewers and giving the necessary permission to pipelines use the agent pools.
-
+This project intends to fully automitize a repository setup at Azure Devops. Configuring pipelines, build policies, branches policies, and required reviewers.
 
 ## Arguments
 ---
